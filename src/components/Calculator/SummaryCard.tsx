@@ -92,12 +92,13 @@ export default function SummaryCard() {
                         <span
                             className="text-6xl font-black tabular-nums"
                             style={{
-                                background: hasData
+                                backgroundImage: hasData
                                     ? `linear-gradient(135deg, ${gradeInfo.color}, var(--primary))`
-                                    : "var(--secondary)",
-                                WebkitBackgroundClip: "text",
-                                WebkitTextFillColor: "transparent",
-                                backgroundClip: "text",
+                                    : "none",
+                                WebkitBackgroundClip: hasData ? "text" : "unset",
+                                backgroundClip: hasData ? "text" : "unset",
+                                WebkitTextFillColor: hasData ? "transparent" : "unset",
+                                color: hasData ? "transparent" : "var(--muted-foreground)",
                             }}
                         >
                             {hasData ? formatGrade(currentCPA) : "—"}
