@@ -7,11 +7,23 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
- * Làm tròn số đến 2 chữ số thập phân.
+ * Hiển thị CPA với 2 chữ số thập phân.
+ * Quy tắc làm tròn: chỉ xét chữ số thập phân thứ 3.
+ *   - Nếu chữ số thứ 3 >= 5 → làm tròn lên chữ số thứ 2.
+ *   - Nếu chữ số thứ 3 <  5 → bỏ đi (truncate).
+ * Ví dụ: 2.495 → "2.50", 2.493 → "2.49", 2.4953 → "2.50"
  */
 export function formatGrade(value: number): string {
     if (!isFinite(value) || isNaN(value)) return "—";
-    return value.toFixed(2);
+    // Lấy chữ số thập phân thứ 3 (bỏ qua thứ 4 trở đi)
+    const thirdDecimalDigit = Math.floor(Math.abs(value) * 1000) % 10;
+    // Cắt về 2 chữ số thập phân (không làm tròn)
+    const truncated = Math.trunc(value * 100) / 100;
+    // Nếu chữ số thứ 3 >= 5 thì cộng thêm 0.01
+    if (thirdDecimalDigit >= 5) {
+        return (truncated + 0.01).toFixed(2);
+    }
+    return truncated.toFixed(2);
 }
 
 /**
