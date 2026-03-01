@@ -1,5 +1,5 @@
-// Thang điểm 4 được phép nhập
-export const VALID_GRADES = [1, 1.5, 2, 2.5, 3, 3.5, 4] as const;
+// Thang điểm 4 được phép nhập (0 = F, không đạt)
+export const VALID_GRADES = [0, 1, 1.5, 2, 2.5, 3, 3.5, 4] as const;
 export type ValidGrade = (typeof VALID_GRADES)[number];
 
 // Các mốc CPA tiêu chuẩn

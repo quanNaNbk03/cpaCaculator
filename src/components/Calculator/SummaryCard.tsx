@@ -182,7 +182,7 @@ export default function SummaryCard() {
                         </div>
                     </div>
                 ) : remainingCredits <= 0 ? (
-                    /* Đã học hết tín chỉ nhưng không đạt */
+                    /* Đã học hết tín chỉ nhưng chưa đạt */
                     <div
                         className="flex items-start gap-3 rounded-xl p-4"
                         style={{ background: "rgba(255,71,87,0.1)", border: "1px solid rgba(255,71,87,0.2)" }}
@@ -190,15 +190,16 @@ export default function SummaryCard() {
                         <AlertTriangle size={20} style={{ color: "var(--destructive)", flexShrink: 0, marginTop: 2 }} />
                         <div>
                             <p className="text-sm font-bold" style={{ color: "var(--destructive)" }}>
-                                Không thể đạt được
+                                ⚠️ Chưa thể đạt được — cần học cải thiện
                             </p>
                             <p className="text-xs mt-1" style={{ color: "var(--muted-foreground)" }}>
                                 Bạn đã học hết tín chỉ nhưng CPA ({formatGrade(currentCPA)}) chưa đạt mục tiêu ({goal.targetCPA}).
+                                Hãy dùng phần <b style={{ color: "var(--foreground)" }}>Giả lập cải thiện</b> bên dưới để tìm lộ trình phù hợp.
                             </p>
                         </div>
                     </div>
                 ) : !isFeasible ? (
-                    /* Không khả thi — cần điểm quá cao */
+                    /* Chưa khả thi — cần học cải thiện */
                     <div
                         className="flex items-start gap-3 rounded-xl p-4"
                         style={{ background: "rgba(255,71,87,0.1)", border: "1px solid rgba(255,71,87,0.2)" }}
@@ -206,14 +207,15 @@ export default function SummaryCard() {
                         <AlertTriangle size={20} style={{ color: "var(--destructive)", flexShrink: 0, marginTop: 2 }} />
                         <div>
                             <p className="text-sm font-bold" style={{ color: "var(--destructive)" }}>
-                                ⚠️ Không thể đạt được
+                                ⚠️ Chưa thể đạt được — cần học cải thiện môn học
                             </p>
                             <p className="text-xs mt-1.5 leading-relaxed" style={{ color: "var(--muted-foreground)" }}>
                                 Bạn còn{" "}
                                 <b style={{ color: "var(--foreground)" }}>{remainingCredits}</b> tín chỉ.
-                                Để đạt <b style={{ color: "var(--foreground)" }}>{targetLabel}</b>, bạn cần điểm trung bình{" "}
+                                Dù đạt 4.0 toàn bộ, bạn vẫn cần thêm{" "}
                                 <b style={{ color: "var(--destructive)" }}>{formatGrade(requiredScore)}</b>{" "}
-                                — vượt quá thang điểm 4.0.
+                                điểm trung bình — vượt thang 4.0. Hãy dùng{" "}
+                                <b style={{ color: "var(--foreground)" }}>Giả lập cải thiện</b> bên dưới.
                             </p>
                         </div>
                     </div>
