@@ -59,14 +59,26 @@ export function calculateRequiredScore(
 
 /**
  * Tính toán tổng hợp tất cả kết quả từ danh sách môn và mục tiêu.
+ * Nếu goal.quickInput được cung cấp, dùng dữ liệu đó thay vì tính từ subjects.
  */
 export function calculateResult(
     subjects: Subject[],
     goal: UserGoal
 ): CalculatorResult {
-    const valid = subjects.filter((s) => s.credits > 0 && s.grade > 0);
-    const earnedCredits = valid.reduce((sum, s) => sum + s.credits, 0);
-    const currentCPA = calculateCPA(subjects);
+    let earnedCredits: number;
+    let currentCPA: number;
+
+    if (goal.quickInput && goal.quickInput.credits > 0) {
+        // --- Quick Mode: dùng CPA + tín chỉ nhập trực tiếp ---
+        earnedCredits = goal.quickInput.credits;
+        currentCPA = goal.quickInput.cpa;
+    } else {
+        // --- Manual Mode: tính từ danh sách môn học ---
+        const valid = subjects.filter((s) => s.credits > 0 && s.grade > 0);
+        earnedCredits = valid.reduce((sum, s) => sum + s.credits, 0);
+        currentCPA = calculateCPA(subjects);
+    }
+
     const remainingCredits = Math.max(0, goal.totalProgramCredits - earnedCredits);
 
     const { requiredScore, isFeasible, isAlreadyAchieved } = calculateRequiredScore(

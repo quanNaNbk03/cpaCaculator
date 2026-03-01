@@ -5,9 +5,16 @@ export interface Subject {
     grade: number; // thang 4: 1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4
 }
 
+/** Dữ liệu nhập nhanh: thay thế danh sách môn học */
+export interface QuickInput {
+    cpa: number;     // CPA hiện tại
+    credits: number; // Số tín chỉ đã tích lũy
+}
+
 export interface UserGoal {
-    totalProgramCredits: number; // Tổng tín chỉ toàn khóa
-    targetCPA: number;           // CPA mục tiêu
+    totalProgramCredits: number;  // Tổng tín chỉ toàn khóa
+    targetCPA: number;            // CPA mục tiêu
+    quickInput: QuickInput | null; // Dữ liệu nhập nhanh (null = dùng danh sách môn)
 }
 
 export interface CalculatorResult {

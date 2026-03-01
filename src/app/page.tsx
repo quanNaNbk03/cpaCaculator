@@ -5,11 +5,13 @@ import TargetConfig from "@/components/Calculator/TargetConfig";
 import InputForm from "@/components/Calculator/InputForm";
 import ExcelImport from "@/components/Calculator/ExcelImport";
 import SummaryCard from "@/components/Calculator/SummaryCard";
+import QuickInputForm from "@/components/Calculator/QuickInputForm";
 import { useCalculator } from "@/context/CalculatorContext";
-import { Trash2 } from "lucide-react";
+import { Trash2, ListChecks, Zap } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function HomePage() {
-  const { clearSubjects, subjects } = useCalculator();
+  const { clearSubjects, subjects, inputMode, setInputMode } = useCalculator();
 
   return (
     <main className="min-h-screen px-4 py-8 md:px-6 lg:px-8">
@@ -38,7 +40,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          {subjects.length > 0 && (
+          {inputMode === "manual" && subjects.length > 0 && (
             <button
               onClick={clearSubjects}
               className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all hover:opacity-80 self-start sm:self-auto"
@@ -60,8 +62,55 @@ export default function HomePage() {
         {/* Left column: input */}
         <div className="flex flex-col gap-5">
           <TargetConfig />
-          <ExcelImport />
-          <InputForm />
+
+          {/* ── Input mode card with tab switcher ── */}
+          <div
+            className="rounded-2xl p-5"
+            style={{ background: "var(--card)", border: "1px solid var(--border)" }}
+          >
+            {/* Tab bar */}
+            <div
+              className="flex rounded-xl p-1 mb-5"
+              style={{ background: "var(--secondary)" }}
+            >
+              {(
+                [
+                  { mode: "manual", icon: <ListChecks size={14} />, label: "Nhập từng môn" },
+                  { mode: "quick", icon: <Zap size={14} />, label: "Nhập nhanh" },
+                ] as const
+              ).map(({ mode, icon, label }) => {
+                const isActive = inputMode === mode;
+                return (
+                  <button
+                    key={mode}
+                    onClick={() => setInputMode(mode)}
+                    className={cn(
+                      "flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-200",
+                      isActive ? "shadow-sm" : "hover:opacity-70"
+                    )}
+                    style={{
+                      background: isActive ? "var(--card)" : "transparent",
+                      color: isActive ? "var(--primary)" : "var(--muted-foreground)",
+                      border: isActive ? "1px solid var(--border)" : "1px solid transparent",
+                    }}
+                  >
+                    {icon}
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Tab content */}
+            {inputMode === "quick" ? (
+              <QuickInputForm />
+            ) : (
+              <div className="flex flex-col gap-5">
+                <ExcelImport />
+                <InputForm />
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Right column: result — sticky on large screens */}

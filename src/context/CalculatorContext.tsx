@@ -12,10 +12,14 @@ import { Subject, UserGoal, CalculatorResult } from "@/types";
 import { calculateResult } from "@/lib/calculator";
 import { generateId } from "@/lib/utils";
 
+export type InputMode = "manual" | "quick";
+
 interface CalculatorContextType {
     subjects: Subject[];
     goal: UserGoal;
     result: CalculatorResult;
+    inputMode: InputMode;
+    setInputMode: (mode: InputMode) => void;
     addSubject: () => void;
     updateSubject: (id: string, updates: Partial<Omit<Subject, "id">>) => void;
     removeSubject: (id: string) => void;
@@ -26,6 +30,7 @@ interface CalculatorContextType {
 const DEFAULT_GOAL: UserGoal = {
     totalProgramCredits: 150,
     targetCPA: 3.2,
+    quickInput: null,
 };
 
 const DEFAULT_RESULT: CalculatorResult = {
@@ -43,18 +48,39 @@ export function CalculatorProvider({ children }: { children: ReactNode }) {
     const [subjects, setSubjects] = useState<Subject[]>([]);
     const [goal, setGoalState] = useState<UserGoal>(DEFAULT_GOAL);
     const [result, setResult] = useState<CalculatorResult>(DEFAULT_RESULT);
+    const [inputMode, setInputModeState] = useState<InputMode>("manual");
 
     // Tính lại result mỗi khi subjects hoặc goal thay đổi
     useEffect(() => {
-        if (subjects.length === 0) {
-            setResult({
-                ...DEFAULT_RESULT,
-                remainingCredits: goal.totalProgramCredits,
-            });
-            return;
+        if (inputMode === "quick") {
+            // Quick mode: chỉ tính nếu quickInput đã có dữ liệu
+            if (!goal.quickInput || goal.quickInput.credits <= 0) {
+                setResult({
+                    ...DEFAULT_RESULT,
+                    remainingCredits: goal.totalProgramCredits,
+                });
+                return;
+            }
+        } else {
+            // Manual mode: chỉ tính nếu có môn học
+            if (subjects.length === 0) {
+                setResult({
+                    ...DEFAULT_RESULT,
+                    remainingCredits: goal.totalProgramCredits,
+                });
+                return;
+            }
         }
         setResult(calculateResult(subjects, goal));
-    }, [subjects, goal]);
+    }, [subjects, goal, inputMode]);
+
+    const setInputMode = useCallback((mode: InputMode) => {
+        setInputModeState(mode);
+        // Khi chuyển chế độ, reset quickInput để tránh xung đột
+        if (mode === "manual") {
+            setGoalState((prev) => ({ ...prev, quickInput: null }));
+        }
+    }, []);
 
     const addSubject = useCallback(() => {
         const newSubject: Subject = {
@@ -93,6 +119,8 @@ export function CalculatorProvider({ children }: { children: ReactNode }) {
                 subjects,
                 goal,
                 result,
+                inputMode,
+                setInputMode,
                 addSubject,
                 updateSubject,
                 removeSubject,
