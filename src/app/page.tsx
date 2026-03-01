@@ -128,7 +128,7 @@ export default function HomePage() {
         <p>
           Chạy hoàn toàn trên trình duyệt · Không lưu dữ liệu cá nhân ·{" "}
           <a
-            href="https://github.com"
+            href="https://github.com/quanNaNbk03/cpaCaculator"
             target="_blank"
             rel="noopener noreferrer"
             className="underline hover:opacity-80 transition-opacity"
