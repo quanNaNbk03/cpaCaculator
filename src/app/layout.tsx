@@ -3,9 +3,12 @@ import "./globals.css";
 import { CalculatorProvider } from "@/context/CalculatorContext";
 
 export const metadata: Metadata = {
-  title: "CPA Calculator — Tính điểm & Dự báo tốt nghiệp",
+  title: "CPA Calculator",
   description:
     "Công cụ tính CPA và dự báo điểm cần đạt để tốt nghiệp loại Khá, Giỏi, Xuất sắc dành cho sinh viên đại học hệ tín chỉ.",
+  icons: {
+    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>",
+  },
 };
 
 export default function RootLayout({
