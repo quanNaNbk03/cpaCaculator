@@ -1,4 +1,4 @@
-import { Subject, UserGoal, CalculatorResult } from "@/types";
+import { Subject, UserGoal, CalculatorResult, ImprovementEntry, ImprovementResult } from "@/types";
 
 /**
  * Tính CPA hiện tại từ danh sách môn học đã nhập.
@@ -95,5 +95,36 @@ export function calculateResult(
         requiredScore,
         isFeasible,
         isAlreadyAchieved,
+    };
+}
+
+/**
+ * Tính CPA dự kiến sau khi học cải thiện các môn đã chọn.
+ *
+ * deltaPoints = Σ credits × (targetGrade - currentGrade)  — chỉ entry.selected
+ * improvedCPA = (currentCPA × earnedCredits + deltaPoints) / earnedCredits
+ */
+export function calculateImprovementResult(
+    currentCPA: number,
+    earnedCredits: number,
+    entries: ImprovementEntry[]
+): ImprovementResult {
+    if (earnedCredits <= 0) {
+        return { deltaPoints: 0, improvedCPA: currentCPA, selectedCount: 0 };
+    }
+
+    const selected = entries.filter((e) => e.selected && e.targetGrade > e.currentGrade);
+    const deltaPoints = selected.reduce(
+        (sum, e) => sum + e.credits * (e.targetGrade - e.currentGrade),
+        0
+    );
+
+    const currentAccumulated = currentCPA * earnedCredits;
+    const improvedCPA = Math.min(4.0, (currentAccumulated + deltaPoints) / earnedCredits);
+
+    return {
+        deltaPoints,
+        improvedCPA,
+        selectedCount: selected.length,
     };
 }

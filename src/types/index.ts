@@ -12,9 +12,27 @@ export interface QuickInput {
 }
 
 export interface UserGoal {
-    totalProgramCredits: number;  // Tổng tín chỉ toàn khóa
-    targetCPA: number;            // CPA mục tiêu
+    totalProgramCredits: number;   // Tổng tín chỉ toàn khóa
+    targetCPA: number;             // CPA mục tiêu
     quickInput: QuickInput | null; // Dữ liệu nhập nhanh (null = dùng danh sách môn)
+}
+
+/** Một môn học giả lập cải thiện */
+export interface ImprovementEntry {
+    id: string;
+    name: string;         // Tên môn (readonly ở Manual Mode, editable ở Quick Mode)
+    credits: number;      // Số tín chỉ môn đó
+    currentGrade: number; // Điểm hiện tại (thang 4)
+    targetGrade: number;  // Điểm kỳ vọng sau học lại (mặc định 4.0)
+    selected: boolean;    // Có chọn học lại không
+    isManual: boolean;    // true = do user thêm tay (Quick Mode), false = auto-sync từ subjects
+}
+
+/** Kết quả sau khi tính toán cải thiện */
+export interface ImprovementResult {
+    deltaPoints: number;       // Tổng điểm hệ số gỡ được
+    improvedCPA: number;       // CPA dự kiến sau cải thiện
+    selectedCount: number;     // Số môn đang chọn
 }
 
 export interface CalculatorResult {

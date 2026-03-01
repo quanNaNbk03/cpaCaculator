@@ -6,6 +6,7 @@ import InputForm from "@/components/Calculator/InputForm";
 import ExcelImport from "@/components/Calculator/ExcelImport";
 import SummaryCard from "@/components/Calculator/SummaryCard";
 import QuickInputForm from "@/components/Calculator/QuickInputForm";
+import ImprovementSimulator from "@/components/Calculator/ImprovementSimulator";
 import { useCalculator } from "@/context/CalculatorContext";
 import { Trash2, ListChecks, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -111,6 +112,9 @@ export default function HomePage() {
               </div>
             )}
           </div>
+
+          {/* Improvement Simulator — visible in both modes when data exists */}
+          <ImprovementSimulator />
         </div>
 
         {/* Right column: result — sticky on large screens */}

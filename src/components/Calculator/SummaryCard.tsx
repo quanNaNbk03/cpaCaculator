@@ -4,7 +4,7 @@ import React from "react";
 import { useCalculator } from "@/context/CalculatorContext";
 import { formatGrade, getGradeLabel, calcProgressPercent } from "@/lib/utils";
 import { CPA_THRESHOLDS, TARGET_OPTIONS } from "@/constants/grades";
-import { AlertTriangle, CheckCircle2, TrendingUp } from "lucide-react";
+import { AlertTriangle, CheckCircle2, TrendingUp, ArrowUpCircle } from "lucide-react";
 
 function ProgressBar({
     percent,
@@ -50,7 +50,7 @@ function ProgressBar({
 }
 
 export default function SummaryCard() {
-    const { result, goal } = useCalculator();
+    const { result, goal, improvementResult } = useCalculator();
     const {
         currentCPA,
         earnedCredits,
@@ -66,6 +66,7 @@ export default function SummaryCard() {
         TARGET_OPTIONS.find((o) => o.value === goal.targetCPA)?.label ?? `CPA ${goal.targetCPA}`;
 
     const hasData = earnedCredits > 0;
+    const hasImprovement = improvementResult.selectedCount > 0;
 
     return (
         <div
@@ -107,6 +108,25 @@ export default function SummaryCard() {
                             / 4.0
                         </span>
                     </div>
+
+                    {/* Improved CPA badge */}
+                    {hasData && hasImprovement && (
+                        <div className="flex items-center gap-1.5 mt-2">
+                            <ArrowUpCircle size={13} style={{ color: "#4ade80" }} />
+                            <span className="text-xs" style={{ color: "var(--muted-foreground)" }}>
+                                Sau cải thiện:
+                            </span>
+                            <span className="text-sm font-bold" style={{ color: "#4ade80" }}>
+                                {formatGrade(improvementResult.improvedCPA)}
+                            </span>
+                            <span
+                                className="text-[10px] px-1.5 py-0.5 rounded-full font-semibold"
+                                style={{ background: "rgba(74,222,128,0.15)", color: "#4ade80" }}
+                            >
+                                +{formatGrade(improvementResult.improvedCPA - currentCPA)}
+                            </span>
+                        </div>
+                    )}
                 </div>
 
                 {hasData && (
